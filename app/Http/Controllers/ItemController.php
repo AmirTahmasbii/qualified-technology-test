@@ -11,7 +11,7 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Item::paginate(10);
+        $items = Item::with('media')->latest()->paginate(10);
 
         if ($request->wantsJson()) {
             return response()->json($items);

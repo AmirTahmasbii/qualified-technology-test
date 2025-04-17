@@ -10,6 +10,9 @@ class ItemSeeder extends Seeder
 {
     public function run(): void
     {
-        Item::factory()->count(50)->create();
+        Item::factory()->count(50)->create()->each(function ($item) {
+            $path = storage_path('app/public/sample.png');
+            $item->addMedia($path)->preservingOriginal()->toMediaCollection();
+        });
     }
 }
