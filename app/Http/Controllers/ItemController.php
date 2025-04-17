@@ -29,18 +29,15 @@ class ItemController extends Controller
     {
         $validated = $request->validated();
 
+        $item = Item::create([
+            'title' => $validated['title'],
+            'description' => $validated['description']
+        ]);
+    
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('images', 'public');
+            $item->addMediaFromRequest('image')->toMediaCollection();
         }
-
-        $item = Item::create($validated);
-        $item->addMedia($validated['image'])
-        ->toMediaCollection();
-
-        if ($request->wantsJson()) {
-            return response()->json(['message' => 'Item created successfully']);
-        }
-
-        return redirect()->route('items.index')->with('success', 'Item created successfully');
+    
+        return redirect()->route('items.index');
     }
 }
