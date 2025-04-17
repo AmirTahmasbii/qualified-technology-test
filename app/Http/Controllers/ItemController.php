@@ -16,7 +16,7 @@ class ItemController extends Controller
         if ($request->wantsJson()) {
             return response()->json($items);
         }
-        
+
         return inertia('Item/Index', ['items' => $items]);
     }
 
@@ -33,11 +33,43 @@ class ItemController extends Controller
             'title' => $validated['title'],
             'description' => $validated['description']
         ]);
-    
+
         if ($request->hasFile('image')) {
             $item->addMediaFromRequest('image')->toMediaCollection();
         }
-    
+
         return redirect()->route('items.index');
+    }
+
+    public function edit(Item $item)
+    {
+        $item->load('media');
+        return inertia('Item/Edit', [
+            'item' => $item,
+        ]);
+    }
+
+    public function update(ItemStoreRequest $request, Item $item)
+    {
+        $validated = $request->validated();
+
+        $item->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+        ]);
+
+        if ($request->hasFile('image')) {
+            $item->clearMediaCollection();
+            $item->addMediaFromRequest('image')->toMediaCollection();
+        }
+
+        return redirect()->route('items.index');
+    }
+
+    public function destroy(Item $item)
+    {
+        $item->delete();
+
+        return response()->noContent();
     }
 }

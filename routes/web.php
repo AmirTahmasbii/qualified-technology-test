@@ -4,16 +4,16 @@ use App\Enums\Role;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(App\Http\Controllers\ItemController::class)
-    ->prefix('items')
-    // ->middleware(['auth'])
+    ->prefix('/items')
+    ->middleware(['auth'])
     ->group(function () {
         Route::get('/', 'index')->name('items.index');
         Route::get('/create', 'create')->name('items.create');
         Route::post('/', 'store')->name('items.store');
         // Route::get('items/{item}', 'show')->name('items.show');
-        // Route::get('items/{item}/edit', 'edit')->name('items.edit');
-        // Route::patch('items/{item}', 'update')->name('items.update');
-        // Route::delete('items/{item}', 'destroy')->name('items.destroy');
+        Route::get('/{item}/edit', 'edit')->name('items.edit');
+        Route::put('/{item}', 'update')->name('items.update');
+        Route::delete('/{item}', 'destroy')->name('items.destroy');
     });
 
 Route::get('health', Spatie\Health\Http\Controllers\HealthCheckResultsController::class)->middleware(['auth', 'role:'.Role::SUPER_ADMIN->value]);

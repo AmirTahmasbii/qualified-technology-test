@@ -2,7 +2,7 @@
   <div class="p-6">
     <h1 class="text-2xl font-bold mb-4">Item List</h1>
     <Link href="/items/create" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      + New Item
+    + New Item
     </Link>
     <div class="mt-6 overflow-x-auto">
       <table class="min-w-full border border-gray-200">
@@ -21,12 +21,8 @@
             <td class="px-4 py-2 border-b">{{ item.title }}</td>
             <td class="px-4 py-2 border-b">{{ truncate(item.description) }}</td>
             <td class="px-4 py-2 border-b">
-              <img
-                v-if="item.media && item.media.length"
-                :src="item.media[0].original_url"
-                alt="Item Image"
-                class="w-16 h-16 object-cover rounded"
-              />
+              <img v-if="item.media && item.media.length" :src="item.media[0].original_url" alt="Item Image"
+                class="w-16 h-16 object-cover rounded" />
               <span v-else class="text-sm text-gray-400 italic">No image</span>
             </td>
             <td class="px-4 py-2 border-b space-x-2">
@@ -85,11 +81,13 @@ export default {
     },
     async deleteItem(id) {
       if (!confirm('Are you sure you want to delete this item?')) return
+
       try {
         await axios.delete(`/items/${id}`)
         this.items = this.items.filter(item => item.id !== id)
       } catch (err) {
         console.error('Delete failed:', err)
+        alert('Something went wrong while deleting.')
       }
     }
   }
